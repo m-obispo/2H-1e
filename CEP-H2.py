@@ -2,8 +2,6 @@ import numpy as np
 import sympy as sym
 import matplotlib.pyplot as plt
 
-E_H = 0.5
-
 #Conversões de unidades
 def kcalMol(x):
     return x/0.0015
@@ -14,9 +12,11 @@ def eV(x):
 def angs(x):
     return x*0.5292
 
+#Energia exata do estado fundamental do átomo de H
+E_H = 0.47
+
 #Sympy
 R = sym.symbols('R')
-vec_R = np.arange(0.5, 10, 0.1)
 
 e11 = (1-sym.exp(-2*R)*(1+R))/R
 e12 = sym.exp(-1*R)*(1+R)
@@ -30,6 +30,7 @@ E1 = sym.lambdify(R, expr_E1, 'numpy')
 E2 = sym.lambdify(R, expr_E2, 'numpy')
 dE2 = sym.lambdify(R, expr_dE2, 'numpy')
 
+vec_R = np.arange(0.5, 10, 0.1)
 vec_Re = np.arange(1.5, 3.0, 0.001)
 
 #Questão 6 e 7
