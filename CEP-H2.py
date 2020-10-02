@@ -64,17 +64,39 @@ plt.grid()
 plt.legend(fontsize=18)
 plt.show()
 
-# Questão 9
+# Questão 10
 x = sym.Symbol('x')
-Phi_1 = (sym.exp(-(x-R/2)**2) - sym.exp(-(x+R/2)**2))/(sym.sqrt(2*sym.pi*(1-s12)))
-Phi_2 = (sym.exp(-(x-R/2)**2) + sym.exp(-(x+R/2)**2))/(sym.sqrt(2*sym.pi*(1+s12)))
-rho1_expr = (Phi_1)**2
-rho2_expr = (Phi_2)**2
+vec_x = np.arange(-5., 5., 0.01)
 
+Phi1_expr = (sym.exp(-sym.Abs(x-R/2)) - sym.exp(-sym.Abs(x+R/2)))/(sym.sqrt(2*sym.pi*(1-s12)))
+Phi2_expr = (sym.exp(-sym.Abs(x-R/2)) + sym.exp(-sym.Abs(x+R/2)))/(sym.sqrt(2*sym.pi*(1+s12)))
+Phi1 = sym.lambdify([x, R], Phi1_expr, 'numpy')
+Phi2 = sym.lambdify([x, R], Phi2_expr, 'numpy')
+
+plt.figure(figsize = (12, 8), dpi = 100)
+plt.suptitle('Método Variacional: Íon $H_2^+$', fontsize=24)
+plt.title('Funções de Onda ($R = R_e$)', fontsize=22)
+plt.grid()
+
+plt.plot(angs(vec_x), Phi1(vec_x, Re), 'r-', label='$\\Phi_1(x)$ (Não ligado)')
+plt.plot(angs(vec_x), Phi2(vec_x, Re), 'b-', label='$\\Phi_2(x)$ (Ligado)')
+plt.plot(angs(vec_x), np.zeros(len(vec_x)), 'k--')
+plt.plot([angs(-Re/2), angs(Re/2)], [0., 0.], 'ko', label='Átomos de H')
+
+plt.xlim(angs(vec_x[0]), angs(vec_x[len(vec_x)-1]))
+plt.xlabel('x ($\\mathring{A}$)', fontsize=20)
+plt.ylabel('Função de Onda', fontsize=20)
+plt.xticks(fontsize=18)
+plt.yticks(fontsize=18)
+
+plt.legend(loc = 4,fontsize=15)
+plt.show()
+
+#Questão 11
+rho1_expr = (Phi1_expr)**2
+rho2_expr = (Phi2_expr)**2
 rho1 = sym.lambdify([x, R], rho1_expr, 'numpy')
 rho2 = sym.lambdify([x, R], rho2_expr, 'numpy')
-
-vec_x = np.arange(-3., 3., 0.01)
 
 plt.figure(figsize = (12, 8), dpi = 100)
 plt.suptitle('Método Variacional: Íon $H_2^+$', fontsize=24)
@@ -83,15 +105,14 @@ plt.grid()
 
 plt.plot(angs(vec_x), rho1(vec_x, Re), 'r-', label='$\\rho_1 = |\\Phi_1|^2$ (Não ligado)')
 plt.plot(angs(vec_x), rho2(vec_x, Re), 'b-', label='$\\rho_2 = |\\Phi_2|^2$ (Ligado)')
-plt.plot(angs(-Re/2), 0., 'ko')
-plt.plot(angs( Re/2), 0., 'ko')
+plt.plot([angs(-Re/2), angs(Re/2)], [0., 0.], 'ko', label='Átomos de H')
 
-plt.xlim(angs(-3.), angs(3.))
+plt.xlim(angs(vec_x[0]), angs(vec_x[len(vec_x)-1]))
 plt.ylim(0,0.33)
 plt.xlabel('x ($\\mathring{A}$)', fontsize=20)
-plt.ylabel('Probabilidade (u.a.)', fontsize=20)
+plt.ylabel('Probabilidade', fontsize=20)
 plt.xticks(fontsize=18)
 plt.yticks(fontsize=18)
 
-plt.legend(fontsize=15)
+plt.legend(loc = 9,fontsize=15)
 plt.show()
