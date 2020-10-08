@@ -64,6 +64,40 @@ plt.grid()
 plt.legend(fontsize=18)
 plt.show()
 
+#Questão 9
+
+xi, eta = sym.Symbol('xi'), sym.Symbol('eta')
+
+Phi1_expr = (sym.exp(-1*R*(xi+eta)/2) - sym.exp(-1*R*(xi-eta)/2))/(sym.sqrt(2*sym.pi*(1-s12)))
+Phi2_expr = (sym.exp(-1*R*(xi+eta)/2) + sym.exp(-1*R*(xi-eta)/2))/(sym.sqrt(2*sym.pi*(1+s12)))
+
+vec_xi = np.arange(1., 5., 0.01)
+vec_eta = np.arange(-1., 1., 0.01)
+Xi, Eta = np.meshgrid(vec_xi,vec_eta)
+
+rho1 = sym.lambdify([xi, eta, R], sym.Abs(Phi1_expr)**2, 'numpy')
+rho2 = sym.lambdify([xi, eta, R], sym.Abs(Phi2_expr)**2, 'numpy')
+
+fig = plt.figure(figsize = (12, 10), dpi = 100)
+ax1 = fig.add_subplot(projection = '3d')
+ax1.view_init(30, -10)
+ax1.set_title('Densidade de Probabilidade', fontsize = 18)
+ax1.plot_surface(Xi,Eta,rho1(Xi, Eta, Re), cmap='viridis', rcount = 100,ccount = 100)
+ax1.set_xlabel('$\\xi$', fontsize = 18)
+ax1.set_ylabel('$\\eta$', fontsize = 18)
+ax1.set_zlabel('Probabilidade', fontsize = 18)
+plt.show()
+
+fig = plt.figure(figsize = (12, 10), dpi = 100)
+ax2 = fig.add_subplot(projection = '3d')
+ax2.view_init(30, -10)
+ax2.set_title('Densidade de Probabilidade', fontsize = 18)
+ax2.plot_surface(Xi,Eta,rho2(Xi, Eta, Re), cmap='viridis_r', rcount = 100,ccount = 100)
+ax2.set_xlabel('$\\xi$', fontsize = 18)
+ax2.set_ylabel('$\\eta$', fontsize = 18)
+ax2.set_zlabel('Probabilidade', fontsize = 18)
+plt.show()
+
 # Questão 10
 x = sym.Symbol('x')
 vec_x = np.arange(-5., 5., 0.01)
